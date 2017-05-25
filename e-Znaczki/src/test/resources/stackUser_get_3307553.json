@@ -1,0 +1,30 @@
+{
+  "items": [
+    {
+      "badge_counts": {
+        "bronze": 6,
+        "silver": 0,
+        "gold": 0
+      },
+      "account_id": 4015151,
+      "is_employee": false,
+      "last_modified_date": 1483463916,
+      "last_access_date": 1495736532,
+      "reputation_change_year": 12,
+      "reputation_change_quarter": 12,
+      "reputation_change_month": 12,
+      "reputation_change_week": 10,
+      "reputation_change_day": 0,
+      "reputation": 25,
+      "creation_date": 1392319321,
+      "user_type": "registered",
+      "user_id": 3307553,
+      "link": "https://stackoverflow.com/users/3307553/user3307553",
+      "profile_image": "https://www.gravatar.com/avatar/31dea7338e7fc944c850bcf2549f9bb0?s=128&d=identicon&r=PG&f=1",
+      "display_name": "user3307553"
+    }
+  ],
+  "has_more": false,
+  "quota_max": 10000,
+  "quota_remaining": 9985
+}

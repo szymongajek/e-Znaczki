@@ -1,0 +1,25 @@
+Wymagania biznesowe:
+
+1.      Aplikacja powinna udostępniać usługę do złożenia zamówienia
+	·        walidacje klienta:
+		a.  walidacje danych klienta: wymagane imię i nazwisko oraz poprawny email
+		b.  przy zakupie znaczka/znaczków klient powinien podać user_id konta ze https://stackoverflow.com/, 
+		zlecenie powinno zostać zaakceptowane w przypadku gdy podany user_id ma reputację(całkowitą) powyżej 200
+	·        powinny być do wyboru dwa typy znaczków krajowy i zagraniczny, 
+		jeżeli klient w zamówieniu wybrał więcej niż jeden znaczek zagraniczny to system powinien naliczyć 20% rabatu
+
+2.      Aplikacja powinna udostępniać usługi do pobierania złożonych zamówień oraz wszystkich zamówień klienta
+ 
+Wymagania techniczne :
+·        preferowane : java 8, Spring, Spring Boot, Hibernate, H2, xml-less
+·        RESTFul API
+·        kod powinien być gotowy do wdrożenia produkcyjnego
+·        kod pokryty testami jednostkowymi
+·        automatyczny test funkcjonalny, end to end, rest-> ? -> database
+ 
+dodatkowe informacje:
+·        aplikacja nie wymaga zabezpieczenia(autentykacji, autoryzacji)
+·        aplikacja nie wymaga GUI użytkownika
+·        atutem będzie użycie wzorców GOF (szczególnie behavioral i structural patterns)
+ 
+W razie pytań/wątpliwości proszę o kontakt. W zadaniu nie chodzi o napisanie jak największej ilości kodu, tylko o pokazanie umiejętności posługiwania się Javą.

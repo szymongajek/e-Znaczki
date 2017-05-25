@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "badge_counts": {
+        "bronze": 20,
+        "silver": 8,
+        "gold": 3
+      },
+      "account_id": 5139737,
+      "is_employee": false,
+      "last_modified_date": 1491617554,
+      "last_access_date": 1495734974,
+      "age": 28,
+      "reputation_change_year": 160,
+      "reputation_change_quarter": 10,
+      "reputation_change_month": 10,
+      "reputation_change_week": 5,
+      "reputation_change_day": 0,
+      "reputation": 496,
+      "creation_date": 1412690172,
+      "user_type": "registered",
+      "user_id": 4117496,
+      "accept_rate": 92,
+      "location": "Palo Alto, CA, United States",
+      "website_url": "https://github.com/fishercoder1534/Leetcode",
+      "link": "https://stackoverflow.com/users/4117496/fishercoder",
+      "profile_image": "https://i.stack.imgur.com/GousJ.png?s=128&g=1",
+      "display_name": "FisherCoder"
+    }
+  ],
+  "has_more": false,
+  "quota_max": 10000,
+  "quota_remaining": 9987
+}
