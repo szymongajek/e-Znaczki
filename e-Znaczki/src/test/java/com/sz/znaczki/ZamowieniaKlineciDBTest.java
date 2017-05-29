@@ -1,7 +1,12 @@
 package com.sz.znaczki;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.junit.After;
 import org.junit.Before;
@@ -34,6 +39,9 @@ public class ZamowieniaKlineciDBTest {
 	
 	@Autowired
 	KlientDAO klientDAO;
+	
+	@PersistenceContext
+    private EntityManager entityManager;
 	
 	@Before
 	public 	void dodajDoBazy(){
@@ -167,16 +175,6 @@ public class ZamowieniaKlineciDBTest {
 		
 	}
 	
-	@Test
-	public void usuwanieKlientaUsuwaZamowienia() {
-		Klient jan = klientDAO.findByImieAndNazwiskoAndMail("Jan", "Kowalski", "jank@aaa.pl");
-		
-		klientDAO.delete(jan);
-		
-		assertThat(klientDAO.findByImieAndNazwiskoAndMail("Jan", "Kowalski", "jank@aaa.pl")).isNull();
-		
-		assertThat(zamowienieDAO.findByDaneKlienta("Jan", "Kowalski", "jank@aaa.pl")).isEmpty();;
-	}
 	
 	@Test
 	public void usuwanieZamowienPotemKlienta() {
@@ -190,6 +188,27 @@ public class ZamowieniaKlineciDBTest {
 		assertThat(klientDAO.findByImieAndNazwiskoAndMail("Jan", "Kowalski", "jank@aaa.pl")).isNull();
 		
 		assertThat(zamowienieDAO.findByDaneKlienta("Jan", "Kowalski", "jank@aaa.pl")).isEmpty();;
+	}
+	
+	@Test
+	public void nieMoznaDuplikowacKlientow() {
+		
+		Klient jan1 =  klientDAO.findByImieAndNazwiskoAndMail("Jan", "Kowalski", "jank@aaa.pl");
+		
+		//inne nazwisko
+		Klient innyJanNazw = klientDAO.save(new Klient("Jan", "xxxx", "jank@aaa.pl", "11"));
+		assertThat(jan1.getId()).isNotEqualTo(innyJanNazw.getId());
+		
+		//inny mail
+		Klient innyJanMail = klientDAO.save(new Klient("Jan", "Kowalski", "xxxx@aaa.pl", "11"));
+		assertThat(jan1.getId()).isNotEqualTo(innyJanMail.getId());
+		
+		//te same dane
+		Klient jan2 = new Klient("Jan", "Kowalski", "jank@aaa.pl", "11");
+		
+		assertThatThrownBy(() -> {klientDAO.save(jan2); }).isInstanceOf(Exception.class);
+		entityManager.clear();
+		
 	}
 	
 }

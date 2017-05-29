@@ -3,7 +3,9 @@ package com.sz.znaczki.pojo;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Klienci")
+@Table(name = "Klienci",
+uniqueConstraints={	    @UniqueConstraint(columnNames = {"imie", "nazwisko","mail"})
+}) 
 public class Klient {
 
 	
@@ -12,10 +14,10 @@ public class Klient {
 	@Column(name="klient_id",unique=true, nullable = false)
 	private Long id;
 	
-	@Column( length = 50)
+	@Column( length = 30)
 	private String imie;
 	
-	@Column( length = 50)
+	@Column( length = 30)
 	private String nazwisko;
 	
 	@Column( length = 100)
@@ -63,5 +65,13 @@ public class Klient {
 
 	public void setStackOverflowUID(String stackOverflowUID) {
 		this.stackOverflowUID = stackOverflowUID;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 }

@@ -12,8 +12,7 @@ public class ProstyTekstWalidator implements Walidator {
 
 	@Override
 	public boolean waliduj(String str) {
-		// TODO Auto-generated method stub
-		return false;
+		return   str!=null && str.length()<=max_dlugosc && str.length()>=min_dlugosc && str.matches("[a-zA-Z]*");
 	}
 
 }

@@ -6,9 +6,9 @@ import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
 import static org.assertj.core.api.Assertions.*;
+
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import com.sz.znaczki.TestUtils;
@@ -17,19 +17,21 @@ import com.sz.znaczki.walidacja.StackOverflowUserWalidator;
 
 public class WalidacjeStackOverflowUserTest {
 
+	 
+		
 	@Test
 	public void walidacjaSprawdzaProgReputacji() throws IOException { 
 		
 		RestTemplate template = Mockito.mock(RestTemplate.class);
 		
 		String fileName33xx = "stackUser_get_3307553.json";
-		String req33xxUrl = "https://api.stackexchange.com/2.2/users/3307553?order=desc&sort=reputation&site=stackoverflow";
-		zamokujOdpowiedzDlaUrl(template, fileName33xx, req33xxUrl);
+		String soUID33 = "3307553";
+		zamokujOdpowiedzDlaUrl(template, fileName33xx, soUID33);
 		
 		String fileName44xx = "stackUser_get_4117496.json";
-		String req41xxUrl = "https://api.stackexchange.com/2.2/users/4117496?order=desc&sort=reputation&site=stackoverflow";
+		String soUID41 = "4117496";
 		
-		zamokujOdpowiedzDlaUrl(template, fileName44xx, req41xxUrl);
+		zamokujOdpowiedzDlaUrl(template, fileName44xx, soUID41);
 		
 		
 		StackOverflowUserWalidator walidator10 = 
@@ -38,6 +40,12 @@ public class WalidacjeStackOverflowUserTest {
 		assertThat(walidator10.waliduj("3307553")).isTrue();
 		assertThat(walidator10.waliduj("4117496")).isTrue();
 				
+		StackOverflowUserWalidator walidator25 = 
+				new StackOverflowUserWalidator(template, 25);
+		
+		assertThat(walidator25.waliduj("3307553")).isTrue();
+		assertThat(walidator25.waliduj("4117496")).isTrue();
+		
 		StackOverflowUserWalidator walidator200 = 
 				new StackOverflowUserWalidator(template, 200);
 		
@@ -60,9 +68,9 @@ public class WalidacjeStackOverflowUserTest {
 		RestTemplate template = Mockito.mock(RestTemplate.class);
 		
 		String fileName = "stackUser_get_0000_empty_result.json";
-		String req00xxUrl = "https://api.stackexchange.com/2.2/users/0000?order=desc&sort=reputation&site=stackoverflow";
+		String soUID = "0000";
 		
-		zamokujOdpowiedzDlaUrl(template, fileName, req00xxUrl);
+		zamokujOdpowiedzDlaUrl(template, fileName, soUID);
 		
 		StackOverflowUserWalidator walidator10 = 
 				new StackOverflowUserWalidator(template, 10);
@@ -75,7 +83,7 @@ public class WalidacjeStackOverflowUserTest {
 		
 		RestTemplate template = Mockito.mock(RestTemplate.class);
 		
-		Mockito.when(template.getForEntity(anyString(),any(Class.class))).thenReturn(Mockito.mock(ResponseEntity.class));
+		Mockito.when(template.getForObject(anyString(),any(Class.class),any(Object.class))).thenReturn(new String());
 		
 		StackOverflowUserWalidator walidator10 = 
 				new StackOverflowUserWalidator(template, 10);
@@ -85,16 +93,14 @@ public class WalidacjeStackOverflowUserTest {
 		assertThat(walidator10.waliduj("")).isFalse();
 		assertThat(walidator10.waliduj("!@#$")).isFalse();
 		
-		verify(template, Mockito.never()).getForEntity(anyString(),any(Class.class));
+		verify(template, Mockito.never()).getForObject(anyString(),any(Class.class),any(Object.class));
 	}
 
 
-	private void zamokujOdpowiedzDlaUrl(RestTemplate template, String fileName, String reqUrl) throws IOException {
+	private void zamokujOdpowiedzDlaUrl(RestTemplate template, String fileName, String soUID) throws IOException {
 		String content = TestUtils.readFileTestResources(fileName);
-		ResponseEntity<String> response = Mockito.mock(ResponseEntity.class);
-		Mockito.when(response.getBody()).thenReturn(content);
-		Mockito.when(template.getForEntity(reqUrl,
-				String.class)).thenReturn(response);
+		Mockito.when(template.getForObject(StackOverflowUserWalidator.STACK_OVERFLOW_USER_URL,
+				String.class,soUID)).thenReturn(content);
 	}
 	
 

@@ -16,5 +16,8 @@ public interface ZamowienieDAO extends CrudRepository<Zamowienie, Long>{
 	public List<Zamowienie> findByDaneKlienta(@Param("imie") String imie, @Param("nazwisko") String nazwisko, @Param("mail") String mail);
 	
 	public List<Zamowienie> findByKlient(Klient klient);
+	
+	@Override
+	public List<Zamowienie> findAll();
 
 }
