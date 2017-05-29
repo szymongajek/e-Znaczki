@@ -1,4 +1,4 @@
-package com.sz.znaczki;
+package com.sz.znaczki.walidacja;
 
 import org.springframework.web.client.RestTemplate;
 

@@ -1,4 +1,4 @@
-package com.sz.znaczki;
+package com.sz.znaczki.walidacja;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -10,6 +10,9 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+
+import com.sz.znaczki.TestUtils;
+import com.sz.znaczki.walidacja.StackOverflowUserWalidator;
 
 
 public class WalidacjeStackOverflowUserTest {

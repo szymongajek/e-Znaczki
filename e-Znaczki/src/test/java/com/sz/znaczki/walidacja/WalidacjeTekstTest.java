@@ -1,8 +1,10 @@
-package com.sz.znaczki;
+package com.sz.znaczki.walidacja;
 
 import java.util.Arrays;
 import static org.assertj.core.api.Assertions.*;
 import org.junit.Test;
+
+import com.sz.znaczki.walidacja.ProstyTekstWalidator;
 
 public class WalidacjeTekstTest {
 

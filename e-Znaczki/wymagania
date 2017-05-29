@@ -8,7 +8,8 @@ Wymagania biznesowe:
 	·        powinny być do wyboru dwa typy znaczków krajowy i zagraniczny, 
 		jeżeli klient w zamówieniu wybrał więcej niż jeden znaczek zagraniczny to system powinien naliczyć 20% rabatu
 
-2.      Aplikacja powinna udostępniać usługi do pobierania złożonych zamówień oraz wszystkich zamówień klienta
+2.      Aplikacja powinna udostępniać usługi do pobierania złożonych zamówień
+3.   	pobierania wszystkich zamówień klienta
  
 Wymagania techniczne :
 ·        preferowane : java 8, Spring, Spring Boot, Hibernate, H2, xml-less
