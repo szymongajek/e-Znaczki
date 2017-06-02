@@ -7,18 +7,12 @@ import static org.mockito.Mockito.verify;
 import java.io.IOException;
 import static org.assertj.core.api.Assertions.*;
 
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Profile;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 import com.sz.znaczki.MockRestTemplateProvider;
-import com.sz.znaczki.testUtils.TestUtils;
 import com.sz.znaczki.walidacja.StackOverflowUserWalidator;
 
 
