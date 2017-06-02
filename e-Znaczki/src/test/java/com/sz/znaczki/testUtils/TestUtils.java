@@ -1,4 +1,4 @@
-package com.sz.znaczki;
+package com.sz.znaczki.testUtils;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

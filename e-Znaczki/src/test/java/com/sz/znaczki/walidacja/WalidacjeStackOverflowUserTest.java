@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.web.client.RestTemplate;
 
-import com.sz.znaczki.TestUtils;
+import com.sz.znaczki.testUtils.TestUtils;
 import com.sz.znaczki.walidacja.StackOverflowUserWalidator;
 
 

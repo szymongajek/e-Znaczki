@@ -2,7 +2,9 @@ package com.sz.znaczki;
 
 import java.util.List;
 
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -33,7 +35,12 @@ public class ZnaczkiFasada {
 			
 			Walidator mailWalidator = str-> str.length()<100 && str.length()>0 && str.contains("@");
 			
-			StackOverflowUserWalidator soWalidator = new StackOverflowUserWalidator(new RestTemplate(), 200);
+			HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory(
+		            HttpClientBuilder.create().build());
+		RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
+			
+			
+			StackOverflowUserWalidator soWalidator = new StackOverflowUserWalidator(restTemplate, 200);
 			
 			if (!imieNazwiskoWalidator.waliduj(imie)){
 				throw new NiepoprawneDaneException("Niepropawne imie");
@@ -45,10 +52,9 @@ public class ZnaczkiFasada {
 			if (!mailWalidator.waliduj(mail)){
 				throw new NiepoprawneDaneException("Niepropawny mail");
 			}
-			//TODO GZIP
-//			if (!soWalidator.waliduj(stackOverflowUID)){
-//				throw new NiepoprawneDaneException("Blad walidacji stackOverflowUID");
-//			}
+			if (!soWalidator.waliduj(stackOverflowUID)){
+				throw new NiepoprawneDaneException("Blad walidacji stackOverflowUID");
+			}
 			
 			klient = klientDAO.save(new Klient(imie, nazwisko, mail, stackOverflowUID));
 		}
