@@ -24,6 +24,10 @@ public class ZnaczkiFasada {
 	@Autowired
 	ZamowienieDAO zamowienieDAO;
 	
+	@Autowired
+	RestTemplate restTemplate;
+	
+	
 	
 	public Zamowienie stworzZamowienie(String imie, String nazwisko, String mail, String stackOverflowUID, int liczbaKrajowych, int liczbaZagranicznych)
 			throws NiepoprawneDaneException{
@@ -35,12 +39,8 @@ public class ZnaczkiFasada {
 			
 			Walidator mailWalidator = str-> str.length()<100 && str.length()>0 && str.contains("@");
 			
-			HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory(
-		            HttpClientBuilder.create().build());
-		RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
 			
-			
-			StackOverflowUserWalidator soWalidator = new StackOverflowUserWalidator(restTemplate, 200);
+			StackOverflowUserWalidator soWalidator = new StackOverflowUserWalidator(this.restTemplate, 200);
 			
 			if (!imieNazwiskoWalidator.waliduj(imie)){
 				throw new NiepoprawneDaneException("Niepropawne imie");
@@ -68,11 +68,19 @@ public class ZnaczkiFasada {
 		//zastosuj rabat
 		nowe.setWartosc(0f);
 		
+		// KalkulatorCeny kalk = new KalkulatorCeny();
+		// kalk.oblicz(zam1);
+		//
+		// AdHocRuleFactory
+		//
+		// zam.setemeents
+		// kalk.obliczcene(zam)
+		
 		nowe = zamowienieDAO.save(nowe);
 		
 		return nowe;
 	}
-	
+
 	public List<Zamowienie> wszystkie(){
 		return zamowienieDAO.findAll();
 	}

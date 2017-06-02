@@ -7,31 +7,33 @@ import static org.mockito.Mockito.verify;
 import java.io.IOException;
 import static org.assertj.core.api.Assertions.*;
 
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
+import com.sz.znaczki.MockRestTemplateProvider;
 import com.sz.znaczki.testUtils.TestUtils;
 import com.sz.znaczki.walidacja.StackOverflowUserWalidator;
 
 
 public class WalidacjeStackOverflowUserTest {
 
-	 
-		
+	static RestTemplate template;
+	
+	
+	@BeforeClass
+	public static void initMock() throws IOException{
+		template = (new MockRestTemplateProvider()).mockRestTemplate();
+	}
+	
 	@Test
 	public void walidacjaSprawdzaProgReputacji() throws IOException { 
-		
-		RestTemplate template = Mockito.mock(RestTemplate.class);
-		
-		String fileName33xx = "stackUser_get_3307553.json";
-		String soUID33 = "3307553";
-		zamokujOdpowiedzDlaUrl(template, fileName33xx, soUID33);
-		
-		String fileName44xx = "stackUser_get_4117496.json";
-		String soUID41 = "4117496";
-		
-		zamokujOdpowiedzDlaUrl(template, fileName44xx, soUID41);
 		
 		
 		StackOverflowUserWalidator walidator10 = 
@@ -65,13 +67,6 @@ public class WalidacjeStackOverflowUserTest {
 	@Test
 	public void walidacjaZwracaFalseDlaNieistniejacegoUzytkownika() throws IOException { 
 		
-		RestTemplate template = Mockito.mock(RestTemplate.class);
-		
-		String fileName = "stackUser_get_0000_empty_result.json";
-		String soUID = "0000";
-		
-		zamokujOdpowiedzDlaUrl(template, fileName, soUID);
-		
 		StackOverflowUserWalidator walidator10 = 
 				new StackOverflowUserWalidator(template, 10);
 		
@@ -80,10 +75,6 @@ public class WalidacjeStackOverflowUserTest {
 	
 	@Test
 	public void walidacjaDlaBlednegoIDNieWywolujeSerwisu() throws IOException { 
-		
-		RestTemplate template = Mockito.mock(RestTemplate.class);
-		
-		Mockito.when(template.getForObject(anyString(),any(Class.class),any(Object.class))).thenReturn(new String());
 		
 		StackOverflowUserWalidator walidator10 = 
 				new StackOverflowUserWalidator(template, 10);
@@ -97,11 +88,6 @@ public class WalidacjeStackOverflowUserTest {
 	}
 
 
-	private void zamokujOdpowiedzDlaUrl(RestTemplate template, String fileName, String soUID) throws IOException {
-		String content = TestUtils.readFileTestResources(fileName);
-		Mockito.when(template.getForObject(StackOverflowUserWalidator.STACK_OVERFLOW_USER_URL,
-				String.class,soUID)).thenReturn(content);
-	}
 	
 
 }
