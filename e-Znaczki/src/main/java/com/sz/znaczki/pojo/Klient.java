@@ -3,29 +3,26 @@ package com.sz.znaczki.pojo;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Klienci",
-uniqueConstraints={	    @UniqueConstraint(columnNames = {"imie", "nazwisko","mail"})
-}) 
+@Table(name = "Klienci", uniqueConstraints = { @UniqueConstraint(columnNames = { "imie", "nazwisko", "mail" }) })
 public class Klient {
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="klient_id",unique=true, nullable = false)
+	@Column(name = "klient_id", unique = true, nullable = false)
 	private Long id;
-	
-	@Column( length = 30)
+
+	@Column(length = 30)
 	private String imie;
-	
-	@Column( length = 30)
+
+	@Column(length = 30)
 	private String nazwisko;
-	
-	@Column( length = 100)
+
+	@Column(length = 100)
 	private String mail;
-	
-	@Column( length = 20)
+
+	@Column(length = 20)
 	private String stackOverflowUID;
-	
+
 	public Klient(String imie, String nazwisko, String mail, String stackOverflowUID) {
 		this.imie = imie;
 		this.nazwisko = nazwisko;
@@ -33,7 +30,8 @@ public class Klient {
 		this.stackOverflowUID = stackOverflowUID;
 	}
 
-	public Klient() {}
+	public Klient() {
+	}
 
 	public String getImie() {
 		return imie;

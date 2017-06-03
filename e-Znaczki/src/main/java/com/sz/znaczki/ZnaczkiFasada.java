@@ -4,89 +4,75 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import com.sz.znaczki.dao.KlientDAO;
 import com.sz.znaczki.dao.ZamowienieDAO;
+import com.sz.znaczki.kalkulatory.KalkulatorCeny;
 import com.sz.znaczki.pojo.Klient;
 import com.sz.znaczki.pojo.Zamowienie;
-import com.sz.znaczki.walidacja.StackOverflowUserWalidator;
-import com.sz.znaczki.walidacja.Walidator;
+import com.sz.znaczki.walidacja.klienta.WalidatorKlienta;
 
-@Component 
+@Component
 public class ZnaczkiFasada {
-	
+
 	@Autowired
 	KlientDAO klientDAO;
-	
+
 	@Autowired
 	ZamowienieDAO zamowienieDAO;
-	
+
 	@Autowired
-	RestTemplate restTemplate;
-	
-	
-	
-	public Zamowienie stworzZamowienie(String imie, String nazwisko, String mail, String stackOverflowUID, int liczbaKrajowych, int liczbaZagranicznych)
-			throws NiepoprawneDaneException{
-		
+	List<WalidatorKlienta> walidatory;
+
+	@Autowired
+	KalkulatorCeny kalkulatorCeny;
+
+	/**
+	 * Dla podanych danych wyszukuje klienta w bazie. Jesli klient nie istnieje,
+	 * jego dane sa walidowane i jest dodawany do bazy.<br/>
+	 * Tworzy nowy obiekt zamowienia, oblicza cene i zapisuje do bazy.
+	 * 
+	 * @return w przypadku sukcesu zwraca nowe zamowienie
+	 * @throws NiepoprawneDaneException
+	 *             w przypadku bledu/bledow walidacji zwraca wyjatek zawierajacy
+	 *             opis pierwszego znalezionego bledu
+	 */
+	public Zamowienie stworzZamowienie(String imie, String nazwisko, String mail, String stackOverflowUID,
+			int liczbaKrajowych, int liczbaZagranicznych) throws NiepoprawneDaneException {
+
 		Klient klient = klientDAO.findByImieAndNazwiskoAndMail(imie, nazwisko, mail);
-		if (klient==null){
-			
-			Walidator imieNazwiskoWalidator = str-> str.length()<30 && str.length()>0 && str.matches("[a-zA-Z]*");
-			
-			Walidator mailWalidator = str-> str.length()<100 && str.length()>0 && str.contains("@");
-			
-			
-			StackOverflowUserWalidator soWalidator = new StackOverflowUserWalidator(this.restTemplate, 200);
-			
-			if (!imieNazwiskoWalidator.waliduj(imie)){
-				throw new NiepoprawneDaneException("Niepropawne imie");
+		if (klient == null) {
+
+			Klient nowyKlient = new Klient(imie, nazwisko, mail, stackOverflowUID);
+			for (WalidatorKlienta walidator : walidatory) {
+				String bladWalidacji = walidator.waliduj(nowyKlient);
+				if (bladWalidacji != null) {
+					throw new NiepoprawneDaneException(bladWalidacji);
+				}
 			}
-			if (!imieNazwiskoWalidator.waliduj(nazwisko)){
-				throw new NiepoprawneDaneException("Niepropawne nazwisko");
-			}
-			
-			if (!mailWalidator.waliduj(mail)){
-				throw new NiepoprawneDaneException("Niepropawny mail");
-			}
-			if (!soWalidator.waliduj(stackOverflowUID)){
-				throw new NiepoprawneDaneException("Blad walidacji stackOverflowUID");
-			}
-			
-			klient = klientDAO.save(new Klient(imie, nazwisko, mail, stackOverflowUID));
+
+			klient = klientDAO.save(nowyKlient);
 		}
-	
+
 		Zamowienie nowe = new Zamowienie();
 		nowe.setLiczbaKrajowych(liczbaKrajowych);
 		nowe.setLiczbaZagranicznych(liczbaZagranicznych);
 		nowe.setKlient(klient);
-		nowe.setWartosc(0f);
-		
-		//zastosuj rabat
-		nowe.setWartosc(0f);
-		
-		// KalkulatorCeny kalk = new KalkulatorCeny();
-		// kalk.oblicz(zam1);
-		//
-		// AdHocRuleFactory
-		//
-		// zam.setemeents
-		// kalk.obliczcene(zam)
-		
+
+		kalkulatorCeny.oblicziIUstawWartosc(nowe);
+
 		nowe = zamowienieDAO.save(nowe);
-		
+
 		return nowe;
 	}
 
-	public List<Zamowienie> wszystkie(){
+	public List<Zamowienie> wszystkieZamowienia() {
 		return zamowienieDAO.findAll();
 	}
-	
-	public List<Zamowienie> wszystkieKienta(String imie, String nazwisko, String mail){
-		
+
+	public List<Zamowienie> wszystkieZamowieniaKienta(String imie, String nazwisko, String mail) {
+
 		return zamowienieDAO.findByDaneKlienta(imie, nazwisko, mail);
 	}
-	
 
 }

@@ -1,7 +1,13 @@
 package com.sz.znaczki.walidacja;
 
 @FunctionalInterface
-public interface Walidator {
+public interface Walidator<E> {
 
-	boolean waliduj(String str);
+	/**
+	 * Walidacja obiektu
+	 * 
+	 * @param doWaliadcji
+	 * @return false w przypadku niepoprawnych danych
+	 */
+	boolean waliduj(E doWaliadcji);
 }

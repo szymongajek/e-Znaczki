@@ -39,7 +39,7 @@ public class EndToEndTests {
 	private TestRestTemplate restTemplate;
 
 	@Test
-	public void exampleTest() {
+	public void skladanieIPobieranieZamowienEndToEnd() {
 
 		ResponseEntity<Zamowienie> response;
 		{// dodaj nowe zamowienie
@@ -69,8 +69,10 @@ public class EndToEndTests {
 		assertThat(nowyKlient.getStackOverflowUID()).isEqualTo("4117496");
 
 		{// pobierz wszystkie zamowienia
-			ResponseEntity<List<Zamowienie>> wszystkieResponse = this.restTemplate.exchange("/zamowienia/wszystkie", HttpMethod.GET,
-					new HttpEntity<Object>(new HttpHeaders()), new ParameterizedTypeReference<List<Zamowienie>>() {});
+			ResponseEntity<List<Zamowienie>> wszystkieResponse = this.restTemplate.exchange("/zamowienia/wszystkie",
+					HttpMethod.GET, new HttpEntity<Object>(new HttpHeaders()),
+					new ParameterizedTypeReference<List<Zamowienie>>() {
+					});
 			assertThat(wszystkieResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 			List<Zamowienie> wszystkieLista = wszystkieResponse.getBody();
@@ -78,25 +80,43 @@ public class EndToEndTests {
 					.isEqualTo(1);
 		}
 
-		
 		{// pobierz zamowienia klienta
 			UriComponentsBuilder builder = UriComponentsBuilder.fromPath("/zamowienia/wszystkieKienta")
 					.queryParam("imie", nowyKlient.getImie()).queryParam("nazwisko", nowyKlient.getNazwisko())
 					.queryParam("mail", nowyKlient.getMail());
 
-			 ResponseEntity<List<Zamowienie>> wszystkieKlientaResponse =
-			 this.restTemplate.exchange(
-					 builder.build().encode().toUri(), HttpMethod.GET,  new HttpEntity<>(  new HttpHeaders()),
-			 new ParameterizedTypeReference<List<Zamowienie>>() {});
+			ResponseEntity<List<Zamowienie>> wszystkieKlientaResponse = this.restTemplate.exchange(
+					builder.build().encode().toUri(), HttpMethod.GET, new HttpEntity<>(new HttpHeaders()),
+					new ParameterizedTypeReference<List<Zamowienie>>() {
+					});
 
-			 assertThat(wszystkieKlientaResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+			assertThat(wszystkieKlientaResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-			 List<Zamowienie> wszystkieKlientaLista =
-					 wszystkieKlientaResponse.getBody();
-			 assertThat(wszystkieKlientaLista).hasSize(1);
+			List<Zamowienie> wszystkieKlientaLista = wszystkieKlientaResponse.getBody();
+			assertThat(wszystkieKlientaLista).hasSize(1);
 		}
 
 	}
 
+	@Test
+	public void niepoprawneZamowienieEndToEnd() {
+
+		ResponseEntity<String> response;
+		{// dodaj nowe zamowienie
+			MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+			map.add("imie", "####");
+			map.add("nazwisko", "222");
+			map.add("mail", "jan.testowy@test.pl");
+			map.add("stackOverflowUID", "4117496");
+			map.add("krajowe", "2");
+			map.add("zagraniczne", "12");
+
+			HttpEntity<?> requestEntity = new HttpEntity<Object>(map, new HttpHeaders());
+
+			response = this.restTemplate.postForEntity("/zamowienia/nowe", requestEntity, String.class);
+		}
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+
+	}
 
 }

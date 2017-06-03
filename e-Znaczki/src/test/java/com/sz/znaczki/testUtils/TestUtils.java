@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 
 public class TestUtils {
 
-	
 	/**
 	 * Return string content of src test resources file
 	 * 
@@ -16,10 +15,8 @@ public class TestUtils {
 	 * @return
 	 * @throws IOException
 	 */
-	public static String readFileTestResources (String fileName) 
-			  throws IOException 
-			{
-			  byte[] encoded = Files.readAllBytes(Paths.get("src","test","resources",fileName));
-			  return new String(encoded, Charset.defaultCharset());
-			}
+	public static String readFileTestResources(String fileName) throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get("src", "test", "resources", fileName));
+		return new String(encoded, Charset.defaultCharset());
+	}
 }

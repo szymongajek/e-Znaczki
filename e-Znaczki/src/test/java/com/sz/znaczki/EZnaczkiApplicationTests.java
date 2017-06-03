@@ -14,7 +14,5 @@ public class EZnaczkiApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
-	
-	
 
 }

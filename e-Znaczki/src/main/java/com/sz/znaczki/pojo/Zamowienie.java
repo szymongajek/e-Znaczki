@@ -1,28 +1,28 @@
 package com.sz.znaczki.pojo;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "Zamowienia")
 public class Zamowienie {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="zamowienie_id",unique=true, nullable = false)
+	@Column(name = "zamowienie_id", unique = true, nullable = false)
 	private Long id;
-	
-	@ManyToOne(cascade=CascadeType.PERSIST)
-	private Klient klient;
-	
-	private int liczbaKrajowych;
-	
-	private int liczbaZagranicznych;
-	
-	private float wartosc;
 
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	private Klient klient;
+
+	private int liczbaKrajowych;
+
+	private int liczbaZagranicznych;
+
+	private float wartosc;
 
 	public Zamowienie() {
 	}
-	
+
 	public Klient getKlient() {
 		return klient;
 	}
@@ -34,11 +34,11 @@ public class Zamowienie {
 	public float getWartosc() {
 		return wartosc;
 	}
-	
+
 	public void setWartosc(float wartosc) {
-		this.wartosc=wartosc;
+		this.wartosc = wartosc;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -68,5 +68,5 @@ public class Zamowienie {
 		return "Zamowienie [id=" + id + ", klient=" + klient + ", liczbaKrajowych=" + liczbaKrajowych
 				+ ", liczbaZagranicznych=" + liczbaZagranicznych + ", wartosc=" + wartosc + "]";
 	}
-	
+
 }
